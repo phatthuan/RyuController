@@ -12,9 +12,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import f_classif
-
 class SimpleMonitor13(switch.SimpleSwitch13):
 
     def __init__(self, *args, **kwargs):
@@ -134,11 +131,6 @@ class SimpleMonitor13(switch.SimpleSwitch13):
         y_flow = flow_dataset.iloc[:, -1].values
 
         X_flow_train, X_flow_test, y_flow_train, y_flow_test = train_test_split(X_flow, y_flow, test_size=0.25, random_state=0)
-
-        # Apply Univariate Feature Selection
-        selector = SelectKBest(score_func=f_classif, k=10)
-        X_flow_train = selector.fit_transform(X_flow_train, y_flow_train)
-        X_flow_test = selector.transform(X_flow_test)
 
         classifier = RandomForestClassifier(n_estimators=10, criterion="entropy", random_state=0)
         self.flow_model = classifier.fit(X_flow_train, y_flow_train)
